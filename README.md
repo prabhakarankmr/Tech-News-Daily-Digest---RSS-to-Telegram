@@ -94,8 +94,8 @@ Before you begin, ensure you have:
 ### Step 1: Clone This Repository
 
 ```bash
-git clone https://github.com/yourusername/tech-news-digest-n8n.git
-cd tech-news-digest-n8n
+git clone https://github.com/prabhakarankmr/Tech-News-Daily-Digest---RSS-to-Telegram.git
+cd Tech-News-Daily-Digest---RSS-to-Telegram
 ```
 
 ### Step 2: Import Workflow to n8n
