@@ -538,5 +538,5 @@ If you found this helpful, please star the repo! It helps others discover this w
 
 
 **Made with ❤️ using n8n automation**
-
+Author: Prabha
 Last Updated: January 2026
