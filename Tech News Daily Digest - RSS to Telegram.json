@@ -1,0 +1,782 @@
+{
+  "name": "Tech News Daily Digest - RSS to Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 📝 Setup Steps:\n\n1. **Get Telegram Chat ID:**\n   - Message @get_id_bot on Telegram\n   - Copy your Chat ID\n   - Paste it in \"Send to Telegram\" node\n\n2. **Add Telegram Credentials:**\n   - Create a bot via @BotFather\n   - Get your Bot Token\n   - Add credentials in n8n\n\n3. **Add OpenAI API Key:**\n   - Get API key from OpenAI\n   - Add credentials in n8n\n\n4. **Test:**\n   - Click \"Execute Workflow\"\n   - Check your Telegram!",
+        "height": 224
+      },
+      "id": "dbe50343-769b-47c0-a183-6b287177b72f",
+      "name": "Setup Instructions",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "title-field",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "date-field",
+              "name": "pubDate",
+              "type": "string",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "id": "content-field",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.contentSnippet || $json.content || $json['content:encoded'] }}"
+            },
+            {
+              "id": "link-field",
+              "name": "link",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "66b4fb24-2fda-4325-81a9-21d98484af50",
+      "name": "Normalize Verge",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        544,
+        256
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "title-field",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "date-field",
+              "name": "pubDate",
+              "type": "string",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "id": "content-field",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.contentSnippet || $json.content || $json['content:encoded'] }}"
+            },
+            {
+              "id": "link-field",
+              "name": "link",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "687a9eb7-4a8a-4893-9fc2-b6fa9a411030",
+      "name": "Normalize TechCrunch",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        544,
+        112
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "https://www.theverge.com/rss/index.xml",
+        "options": {}
+      },
+      "id": "e5903ce3-676c-4f9c-8f12-07481b9684cd",
+      "name": "The Verge RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "position": [
+        320,
+        256
+      ],
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://techcrunch.com/feed/",
+        "options": {}
+      },
+      "id": "5e8df33c-3f88-4e85-9bf1-92c9d4816e04",
+      "name": "TechCrunch RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "position": [
+        320,
+        112
+      ],
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## ⏰ Schedule:\n\nCurrently set to run daily at 9 AM.\n\nYou can change this to:\n- Multiple times per day\n- Different hours\n- Specific days of week",
+        "height": 288
+      },
+      "id": "8fe99a54-bc42-4291-8b73-9f39dc611ad7",
+      "name": "Schedule Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "865e0c02-d3b7-4f52-b984-7906e58ac304",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        80,
+        304
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## 📰 Tech News Sources:\n\n✅ TechCrunch\n✅ The Verge\n✅ Ars Technica\n✅ Wired\n✅ MIT Technology Review\n\nAll major, trusted sources!",
+        "height": 304
+      },
+      "id": "51661b80-7a36-46f0-ad57-e977579e489f",
+      "name": "RSS Sources",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        224,
+        880
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chatId": "-5079072109",
+        "text": "=🔥 *Tech News Daily Digest*\n📅 {{ $now.toFormat('MMMM dd, yyyy') }}\n{{ $json.message }}\n\n{{ $json.message.content }}",
+        "additionalFields": {
+          "disable_web_page_preview": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "efb0f67a-615e-4b77-a29d-09dc7bbea7ba",
+      "name": "Send to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        2000,
+        416
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "fe9e0af0-544b-4f23-afa4-b3f635a0f281",
+      "credentials": {
+        "telegramApi": {
+          "id": "EzWBJrZaMziJ4MrJ",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You're a tech news editor. These 5 articles just dropped. Give me the TL;DR that matters:\n\n[1] {{ $json.data[0].title }}\n{{ $json.data[0].content }}\n{{ $json.data[0].link }}\n\n[2] {{ $json.data[1].title }}\n{{ $json.data[1].content }}\n{{ $json.data[1].link }}\n\n[3] {{ $json.data[2].title }}\n{{ $json.data[2].content }}\n{{ $json.data[2].link }}\n\n[4] {{ $json.data[3].title }}\n{{ $json.data[3].content }}\n{{ $json.data[3].link }}\n\n[5] {{ $json.data[4].title }}\n{{ $json.data[4].content }}\n{{ $json.data[4].link }}\n\nFormat:\n🔥 TOP STORY: [Pick the most important article and explain why in 3 sentences]\n\n📱 OTHER KEY NEWS:\n- [Article 2 in 1-2 sentences]\n- [Article 3 in 1-2 sentences]\n- [Article 4 in 1-2 sentences]\n- [Article 5 in 1-2 sentences]\n\n🔗 LINKS:\n[List all 5 numbered links]\n\nKeep it sharp, skip the fluff. Total: ~400 words max."
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 1000,
+          "temperature": 0.7
+        }
+      },
+      "id": "75893d91-2987-4f4f-a8b7-5488dd119f34",
+      "name": "OpenAI Summarize",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1648,
+        416
+      ],
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "Bm2YpmpGyhSOMAaA",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "title, pubDate, content, link",
+        "options": {}
+      },
+      "id": "7bf7e214-0724-48d6-8fcd-4ae37bcd7734",
+      "name": "Aggregate for AI",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        1456,
+        416
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "3a242884-1097-4642-a310-8cafe8fb3af6",
+      "name": "Limit to 5 Articles",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        736,
+        112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "date-condition",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              },
+              "leftValue": "={{ $json.pubDate }}",
+              "rightValue": "={{ $today.minus({ days: 1 }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1b70d803-3742-4839-865c-2f6d0860a453",
+      "name": "Filter Last 24 Hours",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        1248,
+        416
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "numberInputs": 5
+      },
+      "id": "3cb7a8f5-296f-4016-9ab4-042ee8e8c1ed",
+      "name": "Merge All Feeds",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        1024,
+        384
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "title-field",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "date-field",
+              "name": "pubDate",
+              "type": "string",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "id": "content-field",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.contentSnippet || $json.content || $json['content:encoded'] }}"
+            },
+            {
+              "id": "link-field",
+              "name": "link",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "046024d4-137e-4b3f-b390-a82324dcc2a6",
+      "name": "Normalize MIT Tech",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        544,
+        704
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "title-field",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "date-field",
+              "name": "pubDate",
+              "type": "string",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "id": "content-field",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.contentSnippet || $json.content || $json['content:encoded'] }}"
+            },
+            {
+              "id": "link-field",
+              "name": "link",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eee3a2c6-dcd4-482f-b8be-c7bc00033f46",
+      "name": "Normalize Wired",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        544,
+        560
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "title-field",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "date-field",
+              "name": "pubDate",
+              "type": "string",
+              "value": "={{ $json.pubDate }}"
+            },
+            {
+              "id": "content-field",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.contentSnippet || $json.content || $json['content:encoded'] }}"
+            },
+            {
+              "id": "link-field",
+              "name": "link",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a3a4202-c23a-4074-838b-039b061d7284",
+      "name": "Normalize Ars Technica",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        544,
+        400
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "https://www.technologyreview.com/feed/",
+        "options": {}
+      },
+      "id": "9a5a9a22-7764-4ff1-bc01-b346bc7a1bbe",
+      "name": "MIT Tech Review RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "position": [
+        320,
+        704
+      ],
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.wired.com/feed/rss",
+        "options": {}
+      },
+      "id": "37c47a25-e51b-4b9e-b9fd-7caadde89d28",
+      "name": "Wired RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "position": [
+        320,
+        560
+      ],
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.arstechnica.com/arstechnica/index",
+        "options": {}
+      },
+      "id": "ee2a23e4-1fe3-4063-b189-d0ce0dd1419c",
+      "name": "Ars Technica RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "position": [
+        320,
+        400
+      ],
+      "typeVersion": 1.1,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "abe91d39-eef4-4d4f-8781-aa274b7abbee",
+      "name": "Limit to 5 Articles1",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        736,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "6e80eef9-db44-4f8d-a70d-b4ded93ca178",
+      "name": "Limit to 5 Articles2",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        720,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "a9cea856-e7da-4687-9642-516464d4e87a",
+      "name": "Limit to 5 Articles3",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        720,
+        560
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "c6068637-6b48-4c33-ad44-9f3a151fb8bd",
+      "name": "Limit to 5 Articles4",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        720,
+        720
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "The Verge RSS": {
+      "main": [
+        [
+          {
+            "node": "Normalize Verge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TechCrunch RSS": {
+      "main": [
+        [
+          {
+            "node": "Normalize TechCrunch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "The Verge RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TechCrunch RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "MIT Tech Review RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wired RSS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Ars Technica RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize TechCrunch": {
+      "main": [
+        [
+          {
+            "node": "Limit to 5 Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Summarize": {
+      "main": [
+        [
+          {
+            "node": "Send to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate for AI": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit to 5 Articles": {
+      "main": [
+        [
+          {
+            "node": "Merge All Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Last 24 Hours": {
+      "main": [
+        [
+          {
+            "node": "Aggregate for AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All Feeds": {
+      "main": [
+        [
+          {
+            "node": "Filter Last 24 Hours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Verge": {
+      "main": [
+        [
+          {
+            "node": "Limit to 5 Articles1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize MIT Tech": {
+      "main": [
+        [
+          {
+            "node": "Limit to 5 Articles4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Wired": {
+      "main": [
+        [
+          {
+            "node": "Limit to 5 Articles3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Ars Technica": {
+      "main": [
+        [
+          {
+            "node": "Limit to 5 Articles2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MIT Tech Review RSS": {
+      "main": [
+        [
+          {
+            "node": "Normalize MIT Tech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wired RSS": {
+      "main": [
+        [
+          {
+            "node": "Normalize Wired",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ars Technica RSS": {
+      "main": [
+        [
+          {
+            "node": "Normalize Ars Technica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit to 5 Articles1": {
+      "main": [
+        [
+          {
+            "node": "Merge All Feeds",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Limit to 5 Articles2": {
+      "main": [
+        [
+          {
+            "node": "Merge All Feeds",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Limit to 5 Articles3": {
+      "main": [
+        [
+          {
+            "node": "Merge All Feeds",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Limit to 5 Articles4": {
+      "main": [
+        [
+          {
+            "node": "Merge All Feeds",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "709826bc-2620-449d-8701-e2e0b049936b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc1868b3a34e4269fdbbdbfae8ef60c8f2a58885432c55a0e4e3e56fe95c434f"
+  },
+  "id": "q5yHQ2cdJxO0LrNQ",
+  "tags": []
+}
