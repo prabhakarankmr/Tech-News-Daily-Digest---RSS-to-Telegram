@@ -178,7 +178,7 @@
     },
     {
       "parameters": {
-        "chatId": "-5079072109",
+        "chatId": "yourChatId",
         "text": "=🔥 *Tech News Daily Digest*\n📅 {{ $now.toFormat('MMMM dd, yyyy') }}\n{{ $json.message }}\n\n{{ $json.message.content }}",
         "additionalFields": {
           "disable_web_page_preview": false,
@@ -196,7 +196,7 @@
       "webhookId": "fe9e0af0-544b-4f23-afa4-b3f635a0f281",
       "credentials": {
         "telegramApi": {
-          "id": "EzWBJrZaMziJ4MrJ",
+          "id": "yourApiId",
           "name": "Telegram account 2"
         }
       }
@@ -231,7 +231,7 @@
       "typeVersion": 1.8,
       "credentials": {
         "openAiApi": {
-          "id": "Bm2YpmpGyhSOMAaA",
+          "id": "yourOpenAiId",
           "name": "OpenAi account"
         }
       }
